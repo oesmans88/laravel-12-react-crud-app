@@ -21,11 +21,12 @@ export default function ProductForm({ ...props }) {
         },
     ];
 
-    const { data, setData, post, put, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         name: product?.name || '',
         description: product?.description || '',
         price: product?.price || '',
         featured_image: null as File | null,
+        _method: isEdit ? 'PUT' : 'POST',
     });
 
     // Form Submit Handler
@@ -33,7 +34,8 @@ export default function ProductForm({ ...props }) {
         e.preventDefault();
 
         if (isEdit) {
-            put(route('products.update', product.id), {
+            post(route('products.update', product.id), {
+                forceFormData: true,
                 onSuccess: () => reset(),
             });
         } else {

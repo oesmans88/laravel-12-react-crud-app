@@ -70,9 +70,9 @@ class ProductController extends Controller
         }
 
         return Inertia::render('products/index', [
-            'products' => $products,
-            'filters'  => $request->only(['search', 'perPage']),
-            'totalCount' => $totalCount,
+            'products'      => $products,
+            'filters'       => $request->only(['search', 'perPage']),
+            'totalCount'    => $totalCount,
             'filteredCount' => $filteredCount,
         ]);
     }
