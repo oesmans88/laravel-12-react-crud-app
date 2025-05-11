@@ -13,7 +13,6 @@ import React from 'react';
 export default function ProductForm({ ...props }) {
     const { product, isView, isEdit } = props;
 
-    console.log(props);
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: `${isView ? 'Show' : isEdit ? 'Update' : 'Create'} Product`,

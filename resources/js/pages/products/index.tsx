@@ -1,11 +1,13 @@
+import { CustomTable } from '@/components/custom-table';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Pagination } from '@/components/ui/pagination';
+import { ProductTableConfig } from '@/config/tables/product-table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { CirclePlusIcon, Eye, Pencil, Trash2, X } from 'lucide-react';
+import { CirclePlusIcon, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -55,8 +57,6 @@ export default function Index({ products, filters, totalCount, filteredCount }: 
     const { flash } = usePage<{ flash?: { success?: string; error?: string } }>().props;
     const flashMessage = flash?.success || flash?.error;
     const [showAlert, setShowAlert] = useState(flash?.success || flash?.error ? true : false);
-
-    console.log(products);
 
     useEffect(() => {
         if (flashMessage) {
@@ -116,6 +116,15 @@ export default function Index({ products, filters, totalCount, filteredCount }: 
         });
     };
 
+    // Handle Delete
+    const handleDelete = (id: number, route: string) => {
+        if (confirm('Are you sure, you want to delete?')) {
+            router.delete(route, {
+                preserveScroll: true,
+            });
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Product Management" />
@@ -159,79 +168,24 @@ export default function Index({ products, filters, totalCount, filteredCount }: 
                     </div>
                 </div>
 
-                <div className="overflow-hidden rounded-lg border bg-white shadow-sm">
-                    <table className="w-full table-auto">
-                        <thead>
-                            <tr className="bg-gray-700 text-white">
-                                <th className="border p-4">#</th>
-                                <th className="border p-4">Name</th>
-                                <th className="w-90 border p-4">Description</th>
-                                <th className="border p-4">Price (INR)</th>
-                                <th className="border p-4">Featured Image</th>
-                                <th className="border p-4">Created Date</th>
-                                <th className="border p-4">Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {products.data.length > 0 ? (
-                                products.data.map((product, index) => (
-                                    <tr key={index}>
-                                        <td className="border px-4 py-2 text-center">{products.from + index}</td>
-                                        <td className="border px-4 py-2 text-center">{product.name} </td>
-                                        <td className="border px-4 py-2 text-center">{product.description} </td>
-                                        <td className="border px-4 py-2 text-center">{product.price} </td>
-                                        <td className="flex justify-center border px-4 py-2 text-center">
-                                            {product.featured_image && (
-                                                <img src={product.featured_image} alt={product.name} className="h-16 w-20 rounded-lg object-cover" />
-                                            )}
-                                        </td>
-                                        <td className="border px-4 py-2 text-center">{product.created_at}</td>
-                                        <td className="w-40 border px-4 py-2 text-center">
-                                            <Link
-                                                as="button"
-                                                className="cursor-pointer rounded-lg bg-sky-600 p-2 text-white hover:opacity-90"
-                                                href={route('products.show', product.id)}
-                                            >
-                                                <Eye size={18} />{' '}
-                                            </Link>
-
-                                            <Link
-                                                as="button"
-                                                className="ms-2 cursor-pointer rounded-lg bg-blue-600 p-2 text-white hover:opacity-90"
-                                                href={route('products.edit', product.id)}
-                                            >
-                                                <Pencil size={18} />{' '}
-                                            </Link>
-
-                                            <Button
-                                                className="ms-2 cursor-pointer rounded-lg bg-red-600 p-2 text-white hover:opacity-90"
-                                                onClick={() => {
-                                                    if (confirm('Are you sure you want to delete this product?')) {
-                                                        router.delete(route('products.destroy', product.id), {
-                                                            preserveScroll: true,
-                                                        });
-                                                    }
-                                                }}
-                                            >
-                                                <Trash2 size={18} />{' '}
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={7} className="text-md py-4 text-center font-bold text-red-600">
-                                        No Products Found!
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                {/* Custom Table component */}
+                <CustomTable
+                    columns={ProductTableConfig.columns}
+                    actions={ProductTableConfig.actions}
+                    data={products.data}
+                    from={products.from}
+                    onDelete={handleDelete}
+                />
 
                 {/* Pagination */}
-                <Pagination products={products} perPage={data.perPage} onPerPageChange={handlePerPageChange} totalCount={totalCount} filteredCount={filteredCount} search={data.search}  />
+                <Pagination
+                    products={products}
+                    perPage={data.perPage}
+                    onPerPageChange={handlePerPageChange}
+                    totalCount={totalCount}
+                    filteredCount={filteredCount}
+                    search={data.search}
+                />
             </div>
         </AppLayout>
     );
