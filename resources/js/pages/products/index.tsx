@@ -57,7 +57,6 @@ export default function Index({ products, filters, totalCount, filteredCount }: 
     const { flash } = usePage<{ flash?: { success?: string; error?: string } }>().props;
     const flashMessage = flash?.success || flash?.error;
     const [showAlert, setShowAlert] = useState(flash?.success || flash?.error ? true : false);
-
     useEffect(() => {
         if (flashMessage) {
             const timer = setTimeout(() => setShowAlert(false), 3000);

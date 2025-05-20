@@ -1,4 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { useLayout } from '@/contexts/LayoutContext';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 interface AppShellProps {
@@ -21,9 +23,11 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
         return <div className="flex min-h-screen w-full flex-col">{children}</div>;
     }
 
+    const { position } = useLayout();
+
     return (
         <SidebarProvider defaultOpen={isOpen} open={isOpen} onOpenChange={handleSidebarChange}>
-            {children}
+            <div className={cn('flex w-full', position === 'right' ? 'flex-row-reverse' : 'flex-row')}>{children}</div>
         </SidebarProvider>
     );
 }

@@ -6,6 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { LayoutRtlSettings } from '@/components/layout-rtl-settings';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,6 +24,9 @@ export default function Appearance() {
                 <div className="space-y-6">
                     <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
                     <AppearanceTabs />
+
+                    {/* Layout RTL Settings */}
+                    <LayoutRtlSettings />
                 </div>
             </SettingsLayout>
         </AppLayout>

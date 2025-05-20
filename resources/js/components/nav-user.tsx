@@ -7,7 +7,7 @@ import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { ChevronsUpDown } from 'lucide-react';
 
-export function NavUser() {
+export function NavUser({ position }: { position: 'left' | 'right' }) {
     const { auth } = usePage<SharedData>().props;
     const { state } = useSidebar();
     const isMobile = useIsMobile();
@@ -17,9 +17,21 @@ export function NavUser() {
             <SidebarMenuItem>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton size="lg" className="text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent group">
-                            <UserInfo user={auth.user} />
-                            <ChevronsUpDown className="ml-auto size-4" />
+                        <SidebarMenuButton
+                            size="lg"
+                            className="text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent group flex items-center gap-2"
+                        >
+                            {position === 'right' ? (
+                                <>
+                                    <UserInfo user={auth.user} className="text-right" position={position} />
+                                    <ChevronsUpDown className="size-4" />
+                                </>
+                            ) : (
+                                <>
+                                    <ChevronsUpDown className="size-4" />
+                                    <UserInfo user={auth.user} className="text-left" position={position} />
+                                </>
+                            )}
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent

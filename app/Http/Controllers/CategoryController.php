@@ -14,8 +14,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $categories = Category::orderBy('id', 'DESC')->paginate(10)->withQueryString();
+        $categories->getCollection()->transform(fn($category) => [
+            'id'          => $category->id,
+            'name'        => $category->name,
+            'description' => $category->description,
+            'image'       => $category->image,
+            'created_at'  => $category->created_at->format('d M Y'),
+        ]);
+
         return Inertia::render('categories/index', [
-            'categories' => Category::paginate(10)->withQueryString(),
+            'categories' => $categories,
         ]);
     }
 
