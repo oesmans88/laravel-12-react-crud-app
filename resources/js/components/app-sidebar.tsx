@@ -2,11 +2,11 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { useLayout } from '@/contexts/LayoutContext';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, FileText, Folder, LayoutGrid, ShoppingBag } from 'lucide-react';
+import { BookOpen, CalculatorIcon, FileText, Folder, LayoutGrid, ShoppingBag } from 'lucide-react';
 import AppLogo from './app-logo';
-import { useLayout } from '@/contexts/LayoutContext';
 
 const mainNavItems: NavItem[] = [
     {
@@ -24,6 +24,11 @@ const mainNavItems: NavItem[] = [
         href: '/categories',
         icon: FileText,
     },
+    {
+        title: 'Manage Mobile',
+        href: '/mobiles',
+        icon: CalculatorIcon,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -40,7 +45,6 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-
     const { position } = useLayout();
 
     return (
